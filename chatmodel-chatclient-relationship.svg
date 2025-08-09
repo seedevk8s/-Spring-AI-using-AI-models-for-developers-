@@ -1,0 +1,114 @@
+<svg viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .interface { fill: #e6f3ff; stroke: #0066cc; stroke-width: 2; stroke-dasharray: 5,5; }
+      .implementation { fill: #fff8dc; stroke: #ff8c00; stroke-width: 2; }
+      .client { fill: #f0fff0; stroke: #228b22; stroke-width: 2; }
+      .config { fill: #ffe4e1; stroke: #dc143c; stroke-width: 2; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .composition { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#diamond); }
+      .text-title { font-size: 18px; font-weight: bold; fill: #333; }
+      .text-class { font-size: 16px; font-weight: bold; fill: #333; }
+      .text-label { font-size: 14px; fill: #333; }
+      .text-small { font-size: 12px; fill: #555; }
+      .text-code { font-size: 11px; fill: #0066cc; font-family: monospace; }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+    
+    <marker id="diamond" markerWidth="14" markerHeight="14" refX="14" refY="7" orient="auto">
+      <polygon points="7,0 14,7 7,14 0,7" fill="white" stroke="#333" stroke-width="1"/>
+    </marker>
+  </defs>
+  
+  <!-- 제목 -->
+  <text x="500" y="30" class="text-title" text-anchor="middle">ChatModel과 ChatClient 객체 관계</text>
+  
+  <!-- ChatModel 인터페이스 -->
+  <rect x="350" y="70" width="300" height="100" class="interface" rx="5"/>
+  <text x="500" y="95" class="text-class" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <text x="500" y="115" class="text-class" text-anchor="middle">ChatModel</text>
+  <line x1="360" y1="125" x2="640" y2="125" stroke="#0066cc" stroke-width="1"/>
+  <text x="500" y="145" class="text-small" text-anchor="middle">+ call(prompt): ChatResponse</text>
+  <text x="500" y="160" class="text-small" text-anchor="middle">+ stream(prompt): Flux&lt;ChatResponse&gt;</text>
+  
+  <!-- OpenAiChatModel 구현체 -->
+  <rect x="350" y="220" width="300" height="180" class="implementation" rx="5"/>
+  <text x="500" y="245" class="text-class" text-anchor="middle">OpenAiChatModel</text>
+  <line x1="360" y1="255" x2="640" y2="255" stroke="#ff8c00" stroke-width="1"/>
+  <text x="500" y="275" class="text-small" text-anchor="middle">실제 출력된 객체</text>
+  <text x="500" y="295" class="text-code" text-anchor="middle">@Bean으로 자동 생성됨</text>
+  <line x1="360" y1="305" x2="640" y2="305" stroke="#ff8c00" stroke-width="1"/>
+  <text x="500" y="325" class="text-label" text-anchor="middle">defaultOptions:</text>
+  <text x="500" y="345" class="text-code" text-anchor="middle">model: "gpt-4o-mini"</text>
+  <text x="500" y="365" class="text-code" text-anchor="middle">temperature: 0.7</text>
+  <text x="500" y="385" class="text-code" text-anchor="middle">streamUsage: false</text>
+  
+  <!-- 구현 관계 화살표 -->
+  <path d="M 500 220 L 500 170" class="arrow" stroke-dasharray="3,3"/>
+  <text x="520" y="195" class="text-small">implements</text>
+  
+  <!-- OpenAiChatOptions -->
+  <rect x="50" y="260" width="250" height="120" class="config" rx="5"/>
+  <text x="175" y="285" class="text-class" text-anchor="middle">OpenAiChatOptions</text>
+  <line x1="60" y1="295" x2="290" y2="295" stroke="#dc143c" stroke-width="1"/>
+  <text x="175" y="315" class="text-small" text-anchor="middle">설정 정보 담는 객체</text>
+  <text x="175" y="335" class="text-code" text-anchor="middle">application.properties에서</text>
+  <text x="175" y="355" class="text-code" text-anchor="middle">자동으로 매핑됨</text>
+  
+  <!-- Options 연결 -->
+  <path d="M 300 320 L 350 320" class="composition"/>
+  <text x="325" y="310" class="text-small" text-anchor="middle">has</text>
+  
+  <!-- DefaultChatClient -->
+  <rect x="350" y="450" width="300" height="160" class="client" rx="5"/>
+  <text x="500" y="475" class="text-class" text-anchor="middle">DefaultChatClient</text>
+  <line x1="360" y1="485" x2="640" y2="485" stroke="#228b22" stroke-width="1"/>
+  <text x="500" y="505" class="text-small" text-anchor="middle">실제 출력된 객체</text>
+  <text x="500" y="525" class="text-code" text-anchor="middle">@2e952845 (해시코드)</text>
+  <line x1="360" y1="535" x2="640" y2="535" stroke="#228b22" stroke-width="1"/>
+  <text x="500" y="555" class="text-label" text-anchor="middle">주요 메서드:</text>
+  <text x="500" y="575" class="text-small" text-anchor="middle">+ prompt(String): ChatClient</text>
+  <text x="500" y="595" class="text-small" text-anchor="middle">+ call(): CallResponse</text>
+  
+  <!-- ChatModel을 포함 -->
+  <path d="M 500 450 L 500 400" class="composition"/>
+  <text x="520" y="425" class="text-small">contains</text>
+  
+  <!-- Builder -->
+  <rect x="700" y="470" width="250" height="120" class="config" rx="5"/>
+  <text x="825" y="495" class="text-class" text-anchor="middle">ChatClient.Builder</text>
+  <line x1="710" y1="505" x2="940" y2="505" stroke="#dc143c" stroke-width="1"/>
+  <text x="825" y="525" class="text-small" text-anchor="middle">빌더 패턴</text>
+  <text x="825" y="545" class="text-code" text-anchor="middle">ChatClient.builder(model)</text>
+  <text x="825" y="565" class="text-code" text-anchor="middle">.build()</text>
+  
+  <!-- Builder 연결 -->
+  <path d="M 700 530 L 650 530" class="arrow" stroke-dasharray="3,3"/>
+  <text x="675" y="520" class="text-small" text-anchor="middle">creates</text>
+  
+  <!-- 사용 흐름 -->
+  <rect x="350" y="650" width="300" height="100" fill="#f0f0f0" stroke="#666" stroke-width="2" rx="5"/>
+  <text x="500" y="675" class="text-label" text-anchor="middle">실제 사용:</text>
+  <text x="500" y="700" class="text-code" text-anchor="middle">chatClient.prompt("질문")</text>
+  <text x="500" y="720" class="text-code" text-anchor="middle">.call()</text>
+  <text x="500" y="740" class="text-code" text-anchor="middle">.content()</text>
+  
+  <!-- 사용 연결 -->
+  <path d="M 500 610 L 500 650" class="arrow"/>
+  
+  <!-- 범례 -->
+  <g transform="translate(50, 450)">
+    <text x="0" y="0" class="text-label">관계 설명:</text>
+    <line x1="0" y1="10" x2="30" y2="10" class="arrow" stroke-dasharray="3,3"/>
+    <text x="35" y="15" class="text-small">구현/생성</text>
+    
+    <line x1="0" y1="30" x2="30" y2="30" class="composition"/>
+    <text x="35" y="35" class="text-small">포함/구성</text>
+    
+    <line x1="0" y1="50" x2="30" y2="50" class="arrow"/>
+    <text x="35" y="55" class="text-small">사용</text>
+  </g>
+</svg>
