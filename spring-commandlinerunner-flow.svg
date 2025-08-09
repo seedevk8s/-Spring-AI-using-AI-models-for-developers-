@@ -1,0 +1,132 @@
+<svg viewBox="0 0 1200 1400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 스타일 정의 -->
+  <defs>
+    <style>
+      .container { fill: #f0f8ff; stroke: #4169e1; stroke-width: 2; }
+      .bean { fill: #90ee90; stroke: #228b22; stroke-width: 2; }
+      .method { fill: #ffd700; stroke: #ff8c00; stroke-width: 2; }
+      .process { fill: #ffb6c1; stroke: #dc143c; stroke-width: 2; }
+      .output { fill: #dda0dd; stroke: #8b008b; stroke-width: 2; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .text-title { font-size: 24px; font-weight: bold; fill: #333; }
+      .text-label { font-size: 16px; fill: #333; }
+      .text-small { font-size: 14px; fill: #555; }
+      .text-code { font-size: 12px; fill: #0066cc; font-family: monospace; }
+    </style>
+    
+    <!-- 화살표 마커 정의 -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+  
+  <!-- 제목 -->
+  <text x="600" y="40" class="text-title" text-anchor="middle">Spring Boot CommandLineRunner 실행 흐름</text>
+  
+  <!-- 1단계: Spring Boot 시작 -->
+  <rect x="450" y="80" width="300" height="80" class="container" rx="10"/>
+  <text x="600" y="110" class="text-label" text-anchor="middle">1. Spring Boot Application 시작</text>
+  <text x="600" y="135" class="text-code" text-anchor="middle">SpringApplication.run()</text>
+  
+  <!-- 화살표 1 -->
+  <path d="M 600 160 L 600 200" class="arrow"/>
+  
+  <!-- 2단계: Spring Container 초기화 -->
+  <rect x="400" y="200" width="400" height="100" class="container" rx="10"/>
+  <text x="600" y="230" class="text-label" text-anchor="middle">2. Spring Container 초기화</text>
+  <text x="600" y="255" class="text-small" text-anchor="middle">• 모든 @Component, @Service, @Repository 스캔</text>
+  <text x="600" y="280" class="text-small" text-anchor="middle">• Auto-configuration 처리</text>
+  
+  <!-- 화살표 2 -->
+  <path d="M 600 300 L 600 340" class="arrow"/>
+  
+  <!-- 3단계: ChatModel Bean 생성 -->
+  <rect x="150" y="340" width="350" height="120" class="bean" rx="10"/>
+  <text x="325" y="370" class="text-label" text-anchor="middle">3. ChatModel Bean 자동 생성</text>
+  <text x="325" y="395" class="text-small" text-anchor="middle">Spring AI Auto-configuration</text>
+  <text x="325" y="420" class="text-code" text-anchor="middle">application.properties 설정 기반</text>
+  <text x="325" y="445" class="text-code" text-anchor="middle">(API Key, Model 설정 등)</text>
+  
+  <!-- 3단계 병렬: 다른 Bean들 -->
+  <rect x="700" y="340" width="350" height="120" class="bean" rx="10"/>
+  <text x="875" y="385" class="text-label" text-anchor="middle">다른 Bean들 생성</text>
+  <text x="875" y="415" class="text-small" text-anchor="middle">(@Component, @Service 등)</text>
+  
+  <!-- 화살표 3 (ChatModel에서) -->
+  <path d="M 325 460 L 325 500 L 600 500 L 600 540" class="arrow"/>
+  
+  <!-- 화살표 3 (다른 Bean에서) -->
+  <path d="M 875 460 L 875 500 L 600 500 L 600 540" class="arrow"/>
+  
+  <!-- 4단계: CommandLineRunner Bean 생성 -->
+  <rect x="350" y="540" width="500" height="140" class="method" rx="10"/>
+  <text x="600" y="570" class="text-label" text-anchor="middle">4. CommandLineRunner Bean 생성</text>
+  <text x="600" y="595" class="text-code" text-anchor="middle">@Bean</text>
+  <text x="600" y="615" class="text-code" text-anchor="middle">public CommandLineRunner runner(ChatModel model)</text>
+  <text x="600" y="640" class="text-small" text-anchor="middle">• ChatModel 의존성 주입</text>
+  <text x="600" y="665" class="text-small" text-anchor="middle">• Lambda 표현식으로 run() 메서드 구현</text>
+  
+  <!-- 화살표 4 -->
+  <path d="M 600 680 L 600 720" class="arrow"/>
+  
+  <!-- 5단계: 애플리케이션 컨텍스트 준비 완료 -->
+  <rect x="400" y="720" width="400" height="80" class="container" rx="10"/>
+  <text x="600" y="750" class="text-label" text-anchor="middle">5. Application Context 준비 완료</text>
+  <text x="600" y="775" class="text-small" text-anchor="middle">모든 Bean 초기화 완료</text>
+  
+  <!-- 화살표 5 -->
+  <path d="M 600 800 L 600 840" class="arrow"/>
+  
+  <!-- 6단계: CommandLineRunner 실행 -->
+  <rect x="250" y="840" width="700" height="380" class="process" rx="10"/>
+  <text x="600" y="870" class="text-label" text-anchor="middle">6. CommandLineRunner.run() 자동 실행</text>
+  
+  <!-- 6-1: ChatClient 생성 -->
+  <rect x="300" y="900" width="600" height="60" fill="#fff" stroke="#666" stroke-width="1" rx="5"/>
+  <text x="600" y="925" class="text-small" text-anchor="middle">6.1 ChatClient 생성</text>
+  <text x="600" y="945" class="text-code" text-anchor="middle">ChatClient chatClient = ChatClient.builder(model).build()</text>
+  
+  <!-- 6-2: Prompt 설정 -->
+  <rect x="300" y="980" width="600" height="60" fill="#fff" stroke="#666" stroke-width="1" rx="5"/>
+  <text x="600" y="1005" class="text-small" text-anchor="middle">6.2 Prompt 설정</text>
+  <text x="600" y="1025" class="text-code" text-anchor="middle">chatClient.prompt("스티브 잡스의 명언을 세 개 알려줘")</text>
+  
+  <!-- 6-3: API 호출 -->
+  <rect x="300" y="1060" width="600" height="60" fill="#fff" stroke="#666" stroke-width="1" rx="5"/>
+  <text x="600" y="1085" class="text-small" text-anchor="middle">6.3 AI API 호출</text>
+  <text x="600" y="1105" class="text-code" text-anchor="middle">.call().content()</text>
+  
+  <!-- 6-4: 응답 출력 -->
+  <rect x="300" y="1140" width="600" height="60" fill="#fff" stroke="#666" stroke-width="1" rx="5"/>
+  <text x="600" y="1165" class="text-small" text-anchor="middle">6.4 콘솔 출력</text>
+  <text x="600" y="1185" class="text-code" text-anchor="middle">System.out.println("[결과] " + response)</text>
+  
+  <!-- 화살표 6 -->
+  <path d="M 600 1220 L 600 1260" class="arrow"/>
+  
+  <!-- 7단계: 출력 결과 -->
+  <rect x="350" y="1260" width="500" height="100" class="output" rx="10"/>
+  <text x="600" y="1290" class="text-label" text-anchor="middle">7. 콘솔 출력 결과</text>
+  <text x="600" y="1315" class="text-small" text-anchor="middle">[결과] 1. "Stay hungry, stay foolish"</text>
+  <text x="600" y="1335" class="text-small" text-anchor="middle">2. "Innovation distinguishes..."</text>
+  <text x="600" y="1355" class="text-small" text-anchor="middle">3. "Your time is limited..."</text>
+  
+  <!-- 범례 -->
+  <g transform="translate(50, 1100)">
+    <text x="0" y="0" class="text-label">범례:</text>
+    <rect x="0" y="10" width="30" height="20" class="container"/>
+    <text x="40" y="25" class="text-small">Container/Context</text>
+    
+    <rect x="0" y="40" width="30" height="20" class="bean"/>
+    <text x="40" y="55" class="text-small">Bean 생성</text>
+    
+    <rect x="0" y="70" width="30" height="20" class="method"/>
+    <text x="40" y="85" class="text-small">메서드 실행</text>
+    
+    <rect x="0" y="100" width="30" height="20" class="process"/>
+    <text x="40" y="115" class="text-small">프로세스</text>
+    
+    <rect x="0" y="130" width="30" height="20" class="output"/>
+    <text x="40" y="145" class="text-small">출력</text>
+  </g>
+</svg>
